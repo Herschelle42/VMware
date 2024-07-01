@@ -98,6 +98,10 @@ function Get-VMTags-REST ($vCenterConnections) {
                                 $vm.vcenter = $vcenter.Name
                             }
 
+                            if(-not [bool]($vm.PSObject.Properties.Name -match "tags")) {
+                                $vm | Add-Member -MemberType NoteProperty -Name "tags" -Value $null
+                            }
+
                             #helps if you actually return the object :)
                             $vm
                             
@@ -118,7 +122,7 @@ function Get-VMTags-REST ($vCenterConnections) {
 
         }
 
-        #Get all tag assocations
+        Write-Verbose "$(Get-date) Get all tag assocations" -Verbose
         $response = $null
         $method = "Get"
         try {
@@ -177,27 +181,26 @@ function Get-VMTags-REST ($vCenterConnections) {
                 
         }
 
-        #now create a new object
+        Write-Verbose "$(Get-date) Collect tags for the VMs" -Verbose
         foreach($vm in $vmlist) {
             
-            foreach($tagId in $tagAssociations | ? { $_.object.id -eq $vm.moref } | Select -ExpandProperty tag) {
+            $vm.tags = foreach($tagId in $tagAssociations | ? { $_.object.id -eq $vm.moref } | Select -ExpandProperty tag) {
                 $tagValue = $taglist | ? { $_.id -eq $tagId } | Select -ExpandProperty name
                 $catId = $taglist | ? { $_.id -eq $tagId } | Select -ExpandProperty category_id
                 $category = $catList | ? { $_.id -eq $catId }
 
                 $hash = [ordered]@{}
-                $hash.Name = $vm.name
-                $hash.TagName = $category.name
-                $hash.TagValue = $tagValue
+                $hash.Category = $category.name
+                $hash.Value = $tagValue
                 $object = New-Object PSObject -Property $hash
                 $object
-
             }
-            
 
         }
 
     }
+    Write-Verbose "$(Get-Date) End" -Verbose
 
 }
 $vmTagList = Get-VMTags-REST $vCenterConnections
+
