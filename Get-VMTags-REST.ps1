@@ -12,6 +12,10 @@
     mssql-tst1 Backups    DBServer         
     mssql-tst1 project_id PR-000017        
 
+    References:
+    https://vdc-download.vmware.com/vmwb-repository/dcr-public/c2c7244e-817b-40d8-98f3-6c2ad5db56d6/af6d8ff7-1c38-4571-b72a-614ac319a62b/index.html#PKG_com.vmware.cis.tagging
+    https://vdc-download.vmware.com/vmwb-repository/dcr-public/c2c7244e-817b-40d8-98f3-6c2ad5db56d6/af6d8ff7-1c38-4571-b72a-614ac319a62b/index.html#PKG_com.vmware.vcenter.tagging
+
 #>
 
 $Credential = $cred_userId
