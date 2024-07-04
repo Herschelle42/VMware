@@ -196,11 +196,14 @@ function Get-VMTags-REST ($vCenterConnections) {
                 $object
             }
 
+            #output the final object
+            $vm
+
         }
 
     }
     Write-Verbose "$(Get-Date) End" -Verbose
 
 }
-$vmTagList = Get-VMTags-REST $vCenterConnections
-
+$vmlist = Get-VMTags-REST $vCenterConnections
+Write-Output "$(Get-Date) Total VMs found: $($vmlist.count)"
